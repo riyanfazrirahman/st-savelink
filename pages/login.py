@@ -23,8 +23,8 @@ with tab_login:
                 st.session_state.logged_in = True
                 st.session_state.username = username
                 st.session_state.role = role
-                st.success(f"Welcome, {username}!")
                 st.rerun()
+                st.success(f"Welcome, {username}!")
             else:
                 st.error("Incorrect username or password.")
 
@@ -45,5 +45,15 @@ with tab_register:
             success = register_user(new_username, new_password)
             if success:
                 st.success("Registration successful! Please log in.")
+
+                role = login(new_username, new_password)
+                if role:
+                    st.session_state.logged_in = True
+                    st.session_state.username = new_username
+                    st.session_state.role = role
+                    st.rerun()
+                    st.toast(f"Welcome, {new_username}!")
+                else:
+                    st.error("Incorrect username or password.")
             else:
                 st.error("Username already taken. Please choose another one.")

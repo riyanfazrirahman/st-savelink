@@ -1,6 +1,7 @@
 import sqlite3
 from datetime import datetime
 
+
 def save_link(username, title, url):
     """Save a link to the database with the associated username and timestamp."""
     conn = sqlite3.connect("database.db")
