@@ -2,9 +2,15 @@ import streamlit as st
 import sqlite3
 import bcrypt
 
+DATABASE = "database.db"
+
+def connect_db():
+    """Create a connection to the SQLite database."""
+    return sqlite3.connect(DATABASE)
+
 def login(username, password):
-    """Memeriksa login user dan memverifikasi password."""
-    conn = sqlite3.connect("database.db")
+    """Verify user login credentials and check password."""
+    conn = connect_db()
     c = conn.cursor()
     
     c.execute("SELECT password, role FROM users WHERE username=?", (username,))
@@ -16,16 +22,14 @@ def login(username, password):
         st.session_state.logged_in = True
         st.session_state.username = username
         st.session_state.role = user[1]
-        return user[1]  # Role pengguna
-    else:
-        return None
-
+        return user[1]  # Return user role
+    return None
 
 def register_user(username, password):
-    """Mendaftarkan user baru dengan password terenkripsi."""
+    """Register a new user with an encrypted password."""
     hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
-    conn = sqlite3.connect("database.db")
+    conn = connect_db()
     c = conn.cursor()
     
     try:
@@ -33,8 +37,6 @@ def register_user(username, password):
         conn.commit()
         return True
     except sqlite3.IntegrityError:
-        return False  # Username sudah ada
+        return False  # Username already exists
     finally:
         conn.close()
-
-

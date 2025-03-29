@@ -3,14 +3,14 @@ from utils.link_manager import save_link
 import requests
 from bs4 import BeautifulSoup
 
-st.title("🔗 Simpan Link")
+st.title("🔗 Save Link")
 
-# Cek apakah user sudah login
+# Check if the user is logged in
 if "logged_in" not in st.session_state or not st.session_state.logged_in:
-    st.warning("⚠️ Anda harus login terlebih dahulu untuk menyimpan link!")
-    st.stop()  # Menghentikan eksekusi kode selanjutnya
+    st.warning("⚠️ You must log in first to save links!")
+    st.stop()  # Stop further execution
 
-url = st.text_input("Masukkan URL")
+url = st.text_input("Enter URL")
 
 def get_title(url):
     try:
@@ -18,12 +18,12 @@ def get_title(url):
         soup = BeautifulSoup(response.text, "html.parser")
         return soup.title.string if soup.title else "No Title"
     except:
-        return "Gagal mengambil title"
+        return "Failed to retrieve title"
 
-if st.button("Simpan"):
+if st.button("Save"):
     if url:
         title = get_title(url)
         save_link(st.session_state.username, title, url)
-        st.success("✅ Link berhasil disimpan!")
+        st.success("✅ Link saved successfully!")
     else:
-        st.error("❌ Masukkan URL terlebih dahulu!")
+        st.error("❌ Please enter a URL first!")
