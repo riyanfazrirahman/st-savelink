@@ -11,5 +11,5 @@ pip install bcrypt
 ### 2. Jalankan aplikasi
 
 ```sh
-py -m streamlit run app.py
+py -m streamlit run streamlit_app.py
 ```
